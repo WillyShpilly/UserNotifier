@@ -1,0 +1,73 @@
+package com.example.user_service.controller.dto.response;
+
+import java.time.LocalDateTime;
+
+public class UserResponse {
+    private Long id;
+    private String name;
+    private String email;
+    private Integer age;
+    private LocalDateTime created_at;
+
+    public UserResponse() {
+    }
+
+    public UserResponse(Long id, String name, String email, Integer age, LocalDateTime created_at) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.created_at = created_at;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+    @Override
+    public String toString() {
+        return "UserResponse{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", created_at=" + created_at +
+                '}';
+    }
+}
