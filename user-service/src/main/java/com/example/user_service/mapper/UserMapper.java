@@ -15,6 +15,7 @@ public interface UserMapper {
     @Mapping(target = "created_at", ignore = true)
     User toEntity(CreateUserRequest request);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "created_at", ignore = true)
     void updateEntityFromDto(UpdateUserRequest request, @MappingTarget User user);
