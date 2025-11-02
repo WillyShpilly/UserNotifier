@@ -11,3 +11,8 @@ public class UserServiceApplication {
 	}
 
 }
+feat: add comprehensive logging to UserController
+
+- Implement Russian-language logging for all HTTP endpoints
+- Include error handling with detailed error messages
+- Configure log levels and patterns in application.yml

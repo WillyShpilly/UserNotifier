@@ -19,3 +19,14 @@ spring:
 
 server:
   port: 8080
+
+logging:
+  level:
+    com.example.user_service: INFO
+    com.example.user_service.controller: DEBUG
+    org.springframework.web: WARN
+    org.hibernate: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+  file:
+    name: "logs/user-service.log"
