@@ -4,6 +4,7 @@ import com.example.user_service.controller.dto.request.CreateUserRequest;
 import com.example.user_service.controller.dto.request.UpdateUserRequest;
 import com.example.user_service.controller.dto.response.UserResponse;
 import com.example.user_service.entity.User;
+import com.example.user_service.event.producer.UserEventProducer;
 import com.example.user_service.mapper.UserMapper;
 import com.example.user_service.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -17,15 +18,23 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserEventProducer userEventProducer;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository,
+                       UserMapper userMapper,
+                       UserEventProducer userEventProducer) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.userEventProducer = userEventProducer;
+
     }
 
     public UserResponse createUser(CreateUserRequest request) {
         User user = userMapper.toEntity(request);
         User savedUser = userRepository.save(user);
+
+        userEventProducer.sendUserCreatedEvent(savedUser.getId(), savedUser.getEmail());
+
         return userMapper.toResponse(savedUser);
     }
 
@@ -53,6 +62,12 @@ public class UserService {
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден с id: " + id));
+
+        Long userId = user.getId();
+        String userEmail = user.getEmail();
+
         userRepository.delete(user);
+
+        userEventProducer.sendUserDeletedEvent(userId, userEmail);
     }
 }

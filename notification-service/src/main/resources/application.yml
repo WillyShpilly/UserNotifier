@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: notification-service
+
+  kafka:
+    consumer:
+      bootstrap-servers:
+        - localhost:9092
+        - localhost:9094
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: notification-group
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.example.user_service.notification_service.event.UserEvent
+
+server:
+  port: 8081
+
+logging:
+  level:
+    com.example.notification_service: INFO
+    org.springframework.kafka: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"

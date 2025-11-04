@@ -1,4 +1,32 @@
+server:
+  port: 8080
+
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        delivery.timeout.ms: 30000
+        linger.ms: 5
+        request.timeout.ms: 15000
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+        retries: 2147483647
+    properties:
+      retries: 3
+      reconnect:
+        backoff:
+          ms: 1000
+          max:
+            ms: 10000
+    admin:
+      auto-create: false
+      properties:
+        ssl.endpoint.identification.algorithm: https
+
   datasource:
     url: jdbc:postgresql://localhost:5432/data
     username: postgres
@@ -16,9 +44,6 @@ spring:
 
   application:
     name: user-service
-
-server:
-  port: 8080
 
 logging:
   level:
