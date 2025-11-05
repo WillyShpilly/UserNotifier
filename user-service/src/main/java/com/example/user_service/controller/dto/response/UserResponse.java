@@ -1,12 +1,25 @@
 package com.example.user_service.controller.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 
+@Schema(description = "Ответ с данными пользователя")
 public class UserResponse {
+
+    @Schema(description = "ID пользователя", example = "1")
     private Long id;
+
+    @Schema(description = "Имя пользователя", example = "Иван Иванов")
     private String name;
+
+    @Schema(description = "Email пользователя", example = "user@example.com")
     private String email;
+
+    @Schema(description = "Возраст пользователя", example = "25")
     private Integer age;
+
+    @Schema(description = "Время создания пользователя", example = "2025-01-15T10:30:00")
     private LocalDateTime created_at;
 
     public UserResponse() {

@@ -1,14 +1,20 @@
 package com.example.user_service.controller.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
+@Schema(description = "Запрос на обновление пользователя")
 public class UpdateUserRequest {
+
+    @Schema(description = "Имя пользователя", example = "Петр Петров")
     @Size(min = 2, max = 50, message = "Имя должно быть от 2 до 50 символов")
     private String name;
 
+    @Schema(description = "Email пользователя", example = "newemail@example.com")
     @Email(message = "Email должен быть валидным")
     private String email;
 
+    @Schema(description = "Возраст пользователя", example = "30")
     @Min(value = 0, message = "Возраст должен быть положительным числом")
     @Max(value = 150, message = "Возраст должен быть реалистичным")
     private Integer age;

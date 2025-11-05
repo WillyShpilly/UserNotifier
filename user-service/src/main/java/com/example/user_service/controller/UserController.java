@@ -4,6 +4,11 @@ import com.example.user_service.controller.dto.request.CreateUserRequest;
 import com.example.user_service.controller.dto.request.UpdateUserRequest;
 import com.example.user_service.controller.dto.response.UserResponse;
 import com.example.user_service.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +29,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(
+            summary = "Получить всех пользователей",
+            description = "Возвращает список всех зарегистрированных пользователей"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Список пользователей успешно получен",
+            content = @Content(schema = @Schema(implementation = UserResponse.class))
+    )
     @GetMapping
     public List<UserResponse> getAllUsers() {
         log.info("GET /api/users - Получение списка всех пользователей");
@@ -32,6 +46,22 @@ public class UserController {
         return users;
     }
 
+    @Operation(
+            summary = "Получить пользователя по ID",
+            description = "Возвращает пользователя по указанному идентификатору"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь найден",
+                    content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Пользователь не найден",
+                    content = @Content
+            )
+    })
     @GetMapping("/{id}")
     public UserResponse getUserById(@PathVariable Long id) {
         log.info("GET /api/users/{} - Получение пользователя по ID", id);
@@ -39,7 +69,22 @@ public class UserController {
         log.info("GET /api/users/{} - Пользователь найден: {}", id, user.getEmail());
         return user;
     }
-
+    @Operation(
+            summary = "Создать нового пользователя",
+            description = "Создает нового пользователя и отправляет событие USER_CREATED в Kafka"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Пользователь успешно создан",
+                    content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Некорректные данные запроса",
+                    content = @Content
+            )
+    })
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
         log.info("POST /api/users - Создание пользователя с email: {}", request.getEmail());
@@ -48,6 +93,22 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(
+            summary = "Обновить пользователя",
+            description = "Обновляет данные существующего пользователя"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь успешно обновлен",
+                    content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Пользователь не найден",
+                    content = @Content
+            )
+    })
     @PutMapping("/{id}")
     public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         log.info("PUT /api/users/{} - Обновление пользователя", id);
@@ -56,6 +117,14 @@ public class UserController {
         return response;
     }
 
+    @Operation(
+            summary = "Удалить пользователя",
+            description = "Удаляет пользователя и отправляет событие USER_DELETED в Kafka"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Пользователь успешно удален"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден", content = @Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         log.info("DELETE /api/users/{} - Удаление пользователя", id);

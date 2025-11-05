@@ -142,3 +142,28 @@
 2025-11-04T17:47:46.726+03:00  INFO 89294 --- [user-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-11-04T17:47:46.730+03:00  INFO 89294 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-11-04T17:47:46.732+03:00  INFO 89294 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-11-04T18:12:39.741+03:00  INFO 90575 --- [user-service] [main] c.e.user_service.UserServiceApplication  : Starting UserServiceApplication using Java 24.0.1 with PID 90575 (/Users/dmitry/Desktop/pet/UserNotifier/user-service/target/classes started by dmitry in /Users/dmitry/Desktop/pet/UserNotifier)
+2025-11-04T18:12:39.743+03:00  INFO 90575 --- [user-service] [main] c.e.user_service.UserServiceApplication  : No active profile set, falling back to 1 default profile: "default"
+2025-11-04T18:12:40.151+03:00  INFO 90575 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-04T18:12:40.177+03:00  INFO 90575 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 1 JPA repository interface.
+2025-11-04T18:12:40.449+03:00  INFO 90575 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-04T18:12:40.456+03:00  INFO 90575 --- [user-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-04T18:12:40.457+03:00  INFO 90575 --- [user-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-11-04T18:12:40.482+03:00  INFO 90575 --- [user-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-04T18:12:40.482+03:00  INFO 90575 --- [user-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 716 ms
+2025-11-04T18:12:40.757+03:00  INFO 90575 --- [user-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-04T18:12:40.771+03:00  INFO 90575 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-04T18:12:40.865+03:00  INFO 90575 --- [user-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@401ec794
+2025-11-04T18:12:40.865+03:00  INFO 90575 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-04T18:12:40.889+03:00  WARN 90575 --- [user-service] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-04T18:12:41.327+03:00  INFO 90575 --- [user-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-04T18:12:41.516+03:00  WARN 90575 --- [user-service] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-04T18:12:41.753+03:00  INFO 90575 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-11-04T18:12:41.759+03:00  INFO 90575 --- [user-service] [main] c.e.user_service.UserServiceApplication  : Started UserServiceApplication in 2.344 seconds (process running for 2.551)
+2025-11-04T18:12:48.687+03:00  INFO 90575 --- [user-service] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-04T18:12:49.158+03:00  INFO 90575 --- [user-service] [http-nio-8080-exec-2] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 201 ms
+2025-11-04T18:13:06.085+03:00  INFO 90575 --- [user-service] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-04T18:13:06.092+03:00  INFO 90575 --- [user-service] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-11-04T18:13:06.095+03:00  INFO 90575 --- [user-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-04T18:13:06.096+03:00  INFO 90575 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-11-04T18:13:06.097+03:00  INFO 90575 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
