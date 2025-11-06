@@ -55,19 +55,3 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
   file:
     name: "logs/user-service.log"
-
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    operations-sorter: method
-    tags-sorter: alpha
-    display-request-duration: true
-  info:
-    title: User Service API
-    description: Microservice for user management with Kafka event-driven architecture
-    version: 1.0.0
-    contact:
-      name: API Support
-      email: support@example.com

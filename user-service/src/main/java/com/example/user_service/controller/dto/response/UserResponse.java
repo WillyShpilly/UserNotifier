@@ -1,11 +1,14 @@
 package com.example.user_service.controller.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDateTime;
 
 @Schema(description = "Ответ с данными пользователя")
-public class UserResponse {
+@Relation(collectionRelation = "users", itemRelation = "user")
+public class UserResponse extends RepresentationModel<UserResponse> {
 
     @Schema(description = "ID пользователя", example = "1")
     private Long id;

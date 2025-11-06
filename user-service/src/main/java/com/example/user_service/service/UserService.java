@@ -70,4 +70,27 @@ public class UserService {
 
         userEventProducer.sendUserDeletedEvent(userId, userEmail);
     }
+
+    public User getUserEntityById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден с id: " + id));
+    }
+
+    public List<User> getAllUsersEntities() {
+        return userRepository.findAll();
+    }
+
+    public User createUserEntity(CreateUserRequest request) {
+        User user = userMapper.toEntity(request);
+        User savedUser = userRepository.save(user);
+        userEventProducer.sendUserCreatedEvent(savedUser.getId(), savedUser.getEmail());
+        return savedUser;
+    }
+
+    public User updateUserEntity(Long id, UpdateUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден с id: " + id));
+        userMapper.updateEntityFromDto(request, user);
+        return userRepository.save(user);
+    }
 }

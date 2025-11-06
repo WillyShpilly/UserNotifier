@@ -1,8 +1,10 @@
 package com.example.user_service.controller;
 
+import com.example.user_service.assembler.UserAssembler;
 import com.example.user_service.controller.dto.request.CreateUserRequest;
 import com.example.user_service.controller.dto.request.UpdateUserRequest;
 import com.example.user_service.controller.dto.response.UserResponse;
+import com.example.user_service.entity.User;
 import com.example.user_service.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,26 +14,31 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
+    private final UserAssembler userAssembler;
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserAssembler userAssembler) {
         this.userService = userService;
+        this.userAssembler = userAssembler;
     }
 
     @Operation(
             summary = "Получить всех пользователей",
-            description = "Возвращает список всех зарегистрированных пользователей"
+            description = "Возвращает список всех зарегистрированных пользователей с HATEOAS ссылками"
     )
     @ApiResponse(
             responseCode = "200",
@@ -39,16 +46,25 @@ public class UserController {
             content = @Content(schema = @Schema(implementation = UserResponse.class))
     )
     @GetMapping
-    public List<UserResponse> getAllUsers() {
+    public CollectionModel<UserResponse> getAllUsers() {
         log.info("GET /api/users - Получение списка всех пользователей");
-        List<UserResponse> users = userService.getAllUsers();
+
+        List<UserResponse> users = userService.getAllUsersEntities().stream()
+                .map(userAssembler::toModel)
+                .toList();
+
+        CollectionModel<UserResponse> collectionModel = CollectionModel.of(users);
+
+        collectionModel.add(linkTo(methodOn(UserController.class).getAllUsers()).withSelfRel());
+        collectionModel.add(linkTo(methodOn(UserController.class).createUser(null)).withRel("create"));
+
         log.info("GET /api/users - Успешно получено {} пользователей", users.size());
-        return users;
+        return collectionModel;
     }
 
     @Operation(
             summary = "Получить пользователя по ID",
-            description = "Возвращает пользователя по указанному идентификатору"
+            description = "Возвращает пользователя по указанному идентификатору с HATEOAS ссылками"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -65,10 +81,12 @@ public class UserController {
     @GetMapping("/{id}")
     public UserResponse getUserById(@PathVariable Long id) {
         log.info("GET /api/users/{} - Получение пользователя по ID", id);
-        UserResponse user = userService.getUserById(id);
-        log.info("GET /api/users/{} - Пользователь найден: {}", id, user.getEmail());
-        return user;
+        User userEntity = userService.getUserEntityById(id);
+        UserResponse response = userAssembler.toModel(userEntity);
+        log.info("GET /api/users/{} - Пользователь найден: {}", id, response.getEmail());
+        return response;
     }
+
     @Operation(
             summary = "Создать нового пользователя",
             description = "Создает нового пользователя и отправляет событие USER_CREATED в Kafka"
@@ -88,7 +106,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
         log.info("POST /api/users - Создание пользователя с email: {}", request.getEmail());
-        UserResponse response = userService.createUser(request);
+        User createdUser = userService.createUserEntity(request);
+        UserResponse response = userAssembler.toModel(createdUser);
         log.info("POST /api/users - Пользователь создан с ID: {}", response.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -112,7 +131,8 @@ public class UserController {
     @PutMapping("/{id}")
     public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         log.info("PUT /api/users/{} - Обновление пользователя", id);
-        UserResponse response = userService.updateUser(id, request);
+        User updatedUser = userService.updateUserEntity(id, request);
+        UserResponse response = userAssembler.toModel(updatedUser);
         log.info("PUT /api/users/{} - Пользователь обновлен", id);
         return response;
     }
