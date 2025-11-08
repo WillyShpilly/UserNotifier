@@ -4,6 +4,7 @@ import com.example.user_service.controller.dto.request.CreateUserRequest;
 import com.example.user_service.controller.dto.request.UpdateUserRequest;
 import com.example.user_service.controller.dto.response.UserResponse;
 import com.example.user_service.entity.User;
+import com.example.user_service.event.producer.UserEventProducer;
 import com.example.user_service.mapper.UserMapper;
 import com.example.user_service.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,9 @@ class UserServiceTest {
     @Mock
     private UserMapper userMapper;
 
+    @Mock
+    private UserEventProducer userEventProducer;
+
     @InjectMocks
     private UserService userService;
 
@@ -47,6 +51,7 @@ class UserServiceTest {
         when(userMapper.toEntity(request)).thenReturn(user);
         when(userRepository.save(user)).thenReturn(savedUser);
         when(userMapper.toResponse(savedUser)).thenReturn(expectedResponse);
+        doNothing().when(userEventProducer).sendUserCreatedEvent(anyLong(), anyString());
 
         // When
         UserResponse actualResponse = userService.createUser(request);
@@ -61,6 +66,7 @@ class UserServiceTest {
         verify(userMapper).toEntity(request);
         verify(userRepository).save(user);
         verify(userMapper).toResponse(savedUser);
+        verify(userEventProducer).sendUserCreatedEvent(1L, "Beavis");
     }
 
     @Test
@@ -151,6 +157,7 @@ class UserServiceTest {
         user.setId(userId);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        doNothing().when(userEventProducer).sendUserDeletedEvent(anyLong(), anyString());
 
         // When
         userService.deleteUser(userId);
@@ -158,6 +165,7 @@ class UserServiceTest {
         // Then
         verify(userRepository).findById(userId);
         verify(userRepository).delete(user);
+        verify(userEventProducer).sendUserDeletedEvent(1L, "Beaves Old");
     }
 
     @Test
@@ -173,5 +181,6 @@ class UserServiceTest {
         assertEquals("Пользователь не найден с id: 999", exception.getMessage());
         verify(userRepository).findById(userId);
         verify(userRepository, never()).delete(any());
+        verify(userEventProducer, never()).sendUserDeletedEvent(anyLong(), anyString());
     }
 }

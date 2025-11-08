@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: user-service
+  config:
+    import: optional:configserver:http://config-server:8888
+  kafka:
+    bootstrap-servers: kafka-1:9090,kafka-2:9090,kafka-3:9090
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+  datasource:
+    url: jdbc:postgresql://postgres:5432/data
+    username: postgres
+    password: admin
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://service-discovery:8761/eureka
